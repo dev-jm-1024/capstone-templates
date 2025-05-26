@@ -3,39 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>글 작성</title>
 </head>
 <body>
-    <main>
-        <h1>글 작성</h1>
-        <form action="/boards/submit" method="post">
-            <div>
-                <label for="title">제목</label>
-                <input type="text" id="title" name="title" required>
-            </div>
-            <div>
-                <label for="content">내용</label>
-                <textarea id="content" name="content" rows="10" required></textarea>
-            </div>
-            <div>
-                <label for="category">카테고리</label>
-                <select id="category" name="category">
-                    <option value="free">자유 게시판</option>
-                    <option value="guide">공략 게시판</option>
-                    <option value="qna">Q&A 게시판</option>
-                    <option value="suggestion">건의사항 게시판</option>
-                    <option value="report">신고 게시판</option>
-                </select>
-            </div>
-            <div>
-                <label for="tags">태그</label>
-                <input type="text" id="tags" name="tags" placeholder="태그를 입력하세요 (쉼표로 구분)">
-            </div>
-            <div>
-                <button type="submit">작성 완료</button>
-                <button type="button" onclick="history.back()">취소</button>
-            </div>
-        </form>
-    </main>
+<form id="postForm">
+    <div>
+        <label for="title">제목</label>
+        <input type="text" id="title" name="postTitle" required>
+    </div>
+    <div>
+        <label for="content">내용</label>
+        <textarea id="content" name="postContent" rows="10" required></textarea>
+    </div>
+    <div>
+        <label for="boardId">카테고리</label>
+        <select id="boardId" name="boardId">
+            <option value="free">자유 게시판</option>
+            <option value="guide">공략 게시판</option>
+            <option value="qna">Q&A 게시판</option>
+            <option value="suggestion">건의사항 게시판</option>
+            <option value="report">신고 게시판</option>
+        </select>
+    </div>
+    <div>
+        <button type="submit">작성 완료</button>
+        <button type="button" onclick="history.back()">취소</button>
+    </div>
+</form>
+
+<script>
+    document.getElementById("postForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const form = e.target;
+        const formData = new FormData(form);
+
+        const token = document.querySelector('meta[name="_csrf"]').getAttribute('content');
+        const header = document.querySelector('meta[name="_csrf_header"]').getAttribute('content');
+
+        const data = {
+            postTitle: formData.get("postTitle"),
+            postContent: formData.get("postContent"),
+            boardId: formData.get("boardId")
+        };
+
+        try {
+            const response = await fetch("/board/api/v1/new", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    [header]: token
+                },
+                credentials: "include",
+                body: JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                // ✅ 성공 시 명시적 리다이렉트
+                window.location.href = "/board";
+            } else {
+                const msg = await response.text();
+                alert("작성 실패: " + msg);
+            }
+        } catch (err) {
+            alert("네트워크 오류 또는 서버 응답 없음");
+            console.error("요청 실패", err);
+        }
+    });
+</script>
+
+
 </body>
 </html>

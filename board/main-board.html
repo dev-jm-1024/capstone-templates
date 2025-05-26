@@ -1,24 +1,89 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>게시판</title>
+    <title>게시판 목록</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .board-section {
+            margin-bottom: 50px;
+        }
+        .board-section h2 {
+            width: 100%;
+            margin-bottom: 10px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 5px;
+        }
+        table {
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #aaa;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        a {
+            color: #007BFF;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
-    <!-- 실제로는 데이터를 가지고 화면에 뿌려져야함 -->
-    <!-- 우선 예상 게시판 하드코딩 -->
-    <!-- 게시판 목록: 자유 게시판, 공략 게시판, Q&A 게시판 -->
-    <!-- 게시판 목록: 건의사항 게시판, 신고 게시판 -->
-    <main>
-        <h1>게시판 목록</h1>
-        <ul>
-            <li><a href="/boards/free">자유 게시판</a></li>
-            <li><a href="/boards/guide">공략 게시판</a></li>
-            <li><a href="/boards/qna">Q&A 게시판</a></li>
-            <li><a href="/boards/suggestion">건의사항 게시판</a></li>
-            <li><a href="/boards/report">신고 게시판</a></li>
-        </ul>
-    </main>
+<main>
+    <h1>게시판 홈</h1>
+
+    <div class="board-section" th:each="board : ${boardList}">
+        <h2>
+            <a th:href="@{'/boards/' + ${board.boardId} +'/view'}"
+               th:text="${board.boardName}">게시판 이름</a>
+        </h2>
+
+        <!-- 게시글이 있는 경우 -->
+        <div th:if="${postsByBoard[board.boardId] != null}">
+            <table>
+                <thead>
+                <tr><th>제목</th><th>작성일</th><th>조회수</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="post : ${postsByBoard[board.boardId]}">
+                    <td>
+                        <a th:href="@{'/boards/' + ${board.boardId} + '/' + ${post.postId}}"
+                           th:text="${post.postTitle}">제목</a>
+                    </td>
+                    <td th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}">날짜</td>
+                    <td th:text="${post.viewConunt}">0</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 게시글이 없는 경우 -->
+
+        <p>게시물이 없습니다.</p>
+    </div>
+    </div>
+
+    <!-- 전체 게시판에 게시물이 하나도 없는 경우 안내 메시지 (선택 사항) -->
+    <div th:if="${isPostsListEmpty}">
+        <hr>
+        <p>현재 게시글이 존재하지 않습니다. 첫 번째 게시글을 작성해보세요!</p>
+    </div>
+
+
+    <!-- 글쓰기 버튼은 항상 표시 -->
+    <form action="boards/new" method="get">
+        <button type="submit">글쓰기</button>
+    </form>
+</main>
 </body>
 </html>
