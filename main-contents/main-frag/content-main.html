@@ -1,42 +1,66 @@
 <!--main-frag-->
 <main class="content-main">
     <!-- 환영 문구 또는 플랫폼 소개 -->
-    <section class="welcome">
-        <h2 th:text="${welcomeTitle}">환영합니다!</h2>
-        <p th:text="${welcomeMessage}">플랫폼 소개 문구가 들어갈 자리입니다.</p>
+    <section class="welcome-section">
+        <div class="welcome-content">
+            <h2 class="welcome-title" th:text="${welcomeTitle}">환영합니다!</h2>
+            <p class="welcome-message" th:text="${welcomeMessage}">플랫폼 소개 문구가 들어갈 자리입니다.</p>
+        </div>
     </section>
 
     <!-- 주요 게임 추천 목록 -->
-    <section class="featured-games">
-        <h2>주요 게임 추천</h2>
-        <ul>
-            <li th:each="game : ${featuredGames}">
-                <a th:href="@{/games/{id}(id=${game.id})}" th:text="${game.title}">게임 제목</a>
-                <p th:text="${game.description}">게임 설명</p>
-            </li>
-        </ul>
+    <section class="featured-games-section">
+        <div class="section-header">
+            <h2 class="section-title">주요 게임 추천</h2>
+        </div>
+        <div class="games-list">
+            <ul class="game-items">
+                <li class="game-item" th:each="game : ${featuredGames}">
+                    <div class="game-info">
+                        <a class="game-title" th:href="@{/games/{id}(id=${game.id})}" th:text="${game.title}">게임 제목</a>
+                        <p class="game-description" th:text="${game.description}">게임 설명</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </section>
 
     <!-- 신규 등록 게임/업데이트된 게임 -->
-    <section class="new-games">
-        <h2>신규 등록 게임</h2>
-        <ul>
-            <li th:each="game : ${newGames}">
-                <a th:href="@{/games/{id}(id=${game.id})}" th:text="${game.title}">게임 제목</a>
-                <span th:text="${#temporals.format(game.uploadDate, 'yyyy-MM-dd')}">업로드 날짜</span>
-            </li>
-        </ul>
+    <section class="new-games-section">
+        <div class="section-header">
+            <h2 class="section-title">신규 등록 게임</h2>
+        </div>
+        <div class="games-list">
+            <ul class="game-items">
+                <li class="game-item" th:each="game : ${newGames}">
+                    <div class="game-info">
+                        <a class="game-title" th:href="@{/games/{id}(id=${game.id})}" th:text="${game.title}">게임 제목</a>
+                    </div>
+                    <div class="game-meta">
+                        <span class="upload-date" th:text="${#temporals.format(game.uploadDate, 'yyyy-MM-dd')}">업로드 날짜</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </section>
 
     <!-- 커뮤니티 최신 글 요약 -->
-    <section class="community-posts">
-        <h2>커뮤니티 최신 글</h2>
-        <ul>
-            <li th:each="post : ${communityPosts}">
-                <a th:href="@{/boards/{id}(id=${post.id})}" th:text="${post.title}">글 제목</a>
-                <span th:text="${post.author}">작성자</span>
-                <span th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}">작성일</span>
-            </li>
-        </ul>
+    <section class="community-posts-section">
+        <div class="section-header">
+            <h2 class="section-title">커뮤니티 최신 글</h2>
+        </div>
+        <div class="posts-list">
+            <ul class="post-items">
+                <li class="post-item" th:each="post : ${communityPosts}">
+                    <div class="post-info">
+                        <a class="post-title" th:href="@{/board/{id}(id=${post.id})}" th:text="${post.title}">글 제목</a>
+                    </div>
+                    <div class="post-meta">
+                        <span class="post-author" th:text="${post.author}">작성자</span>
+                        <span class="post-date" th:text="${#temporals.format(post.createdAt, 'yyyy-MM-dd')}">작성일</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </section>
 </main>

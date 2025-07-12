@@ -1,42 +1,64 @@
 <!--sidebar-frag-->
-<aside class="sidebar">
+<aside class="sidebar" th:fragment="sidebar">
     <!-- 인기 게임 순위 -->
-    <section class="popular-games">
-        <h3>인기 게임 순위</h3>
-        <ol>
-            <li th:each="game : ${popularGames}">
-                <a th:href="@{/games/{id}(id=${game.id})}" th:text="${game.title}">게임 제목</a>
-            </li>
-        </ol>
+    <section class="popular-games-section">
+        <div class="section-header">
+            <h3 class="section-title">인기 게임 순위</h3>
+        </div>
+        <div class="games-ranking">
+            <ol class="ranking-list">
+                <li class="ranking-item" th:each="game : ${popularGames}">
+                    <a class="game-link" th:href="@{/games/{id}(id=${game.id})}" th:text="${game.title}">게임 제목</a>
+                </li>
+            </ol>
+        </div>
     </section>
 
     <!-- 최근 업로드 게임 -->
-    <section class="recent-games">
-        <h3>최근 업로드 게임</h3>
-        <ul>
-            <li th:each="game : ${recentGames}">
-                <a th:href="@{/games/{id}(id=${game.id})}" th:text="${game.title}">게임 제목</a>
-                <span th:text="${#temporals.format(game.uploadDate, 'yyyy-MM-dd')}">업로드 날짜</span>
-            </li>
-        </ul>
+    <section class="recent-games-section">
+        <div class="section-header">
+            <h3 class="section-title">최근 업로드 게임</h3>
+        </div>
+        <div class="recent-games-list">
+            <ul class="game-items">
+                <li class="game-item" th:each="game : ${recentGames}">
+                    <div class="game-info">
+                        <a class="game-link" th:href="@{/games/{id}(id=${game.id})}" th:text="${game.title}">게임 제목</a>
+                    </div>
+                    <div class="game-meta">
+                        <span class="upload-date" th:text="${#temporals.format(game.uploadDate, 'yyyy-MM-dd')}">업로드 날짜</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </section>
 
     <!-- 공지사항 요약 -->
-    <section class="notice-summary">
-        <h3>공지사항</h3>
-        <ul>
-            <li th:each="notice : ${notices}">
-                <a th:href="@{/boards/notice/{id}(id=${notice.id})}" th:text="${notice.title}">공지 제목</a>
-            </li>
-        </ul>
+    <section class="notice-section">
+        <div class="section-header">
+            <h3 class="section-title">공지사항</h3>
+        </div>
+        <div class="notice-list">
+            <ul class="notice-items">
+                <li class="notice-item" th:each="notice : ${notices}">
+                    <a class="notice-link" th:href="@{/board/notice/{id}(id=${notice.id})}" th:text="${notice.title}">공지 제목</a>
+                </li>
+            </ul>
+        </div>
     </section>
 
     <!-- 이벤트 배너 -->
-    <section class="event-banner">
-        <h3>이벤트</h3>
-        <div th:each="event : ${events}">
-            <a th:href="@{/events/{id}(id=${event.id})}" th:text="${event.title}">이벤트 제목</a>
-            <p th:text="${event.description}">이벤트 설명</p>
+    <section class="event-banner-section">
+        <div class="section-header">
+            <h3 class="section-title">이벤트</h3>
+        </div>
+        <div class="event-list">
+            <div class="event-item" th:each="event : ${events}">
+                <div class="event-content">
+                    <a class="event-title" th:href="@{/events/{id}(id=${event.id})}" th:text="${event.title}">이벤트 제목</a>
+                    <p class="event-description" th:text="${event.description}">이벤트 설명</p>
+                </div>
+            </div>
         </div>
     </section>
 </aside>

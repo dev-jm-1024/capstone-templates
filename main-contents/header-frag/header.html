@@ -1,53 +1,67 @@
 <!--header-frag-->
 <header th:fragment="header">
-    <!-- 사이트 로고 -->
-    <h1 class="site-logo">
-        <a href="/" title="홈으로">
-            <!-- <img src="/static/logo.png" alt="사이트 로고"> -->
-            사이트명
-        </a>
-    </h1>
-
-    <!-- 글로벌 내비게이션 -->
-    <!-- header.html 안의 nav 불러오기 -->
-    <nav th:replace="main-contents/nav-frag/nav :: nav"></nav>
-
-
-    <!-- 검색창 -->
-    <form class="search-form" action="/search" method="get">
-        <input type="text" name="q" placeholder="검색어를 입력하세요">
-        <button type="submit">검색</button>
-    </form>
-
-    <!-- 사용자 영역 -->
-    <div class="user-area">
-
-        <!-- 로그인 상태가 아닐 때 -->
-        <div th:if="${not isLoggedIn}">
-            <a href="/game-hub/login">로그인</a>
-            <a href="/game-hub/join">회원가입</a>
+    <div class="header-container">
+        <!-- 사이트 로고 -->
+        <div class="site-logo">
+            <h1>
+                <a href="/" title="홈으로">
+                    <!-- <img src="/static/logo.png" alt="사이트 로고"> -->
+                    사이트명
+                </a>
+            </h1>
         </div>
-        <!-- 로그인 상태일 때 -->
-        <div th:if="${isLoggedIn}">
-            <img th:src="${profileImage}" alt="프로필" class="profile-img">
-            <span th:text="${nickname}">닉네임</span>
-            <form th:action="@{/logout}" method="post">
-                <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
-                <button type="submit">로그아웃</button>
-            </form>
 
+        <!-- 글로벌 내비게이션 -->
+        <div class="nav-container">
+            <nav th:replace="main-contents/nav-frag/nav :: nav"></nav>
+        </div>
 
-            <form th:action="@{${deactivatePath}}" method="patch"
-                  style="background-color: #EBF4F6; color: rgb(54,54,52); font-weight: 900;">
-                <input type="text" name="authUserId" id="authUserId">
-                <input type="password" name="authUserPassword" id="authUserPassword">
-                <button type="submit"></button>
+        <!-- 검색창 -->
+        <div class="search-container">
+            <form class="search-form" action="/search" method="get">
+                <input type="text" name="q" placeholder="검색어를 입력하세요">
+                <button type="submit">검색</button>
             </form>
         </div>
-    </div>
 
-    <!-- 다국어 선택 -->
-    <div class="lang-select">
-        <a href="?lang=ko">🇰🇷 한국어</a> | <a href="?lang=en">🇺🇸 English</a>
+        <!-- 사용자 영역 -->
+        <div class="user-area">
+            <!-- 로그인 상태가 아닐 때 -->
+            <div class="guest-user" th:if="${not isLoggedIn}">
+                <a href="/game-hub/login" class="login-btn">로그인</a>
+                <a href="/game-hub/join" class="signup-btn">회원가입</a>
+                <a href="/game-hub/join-prod" class="team-signup-btn">팀 회원가입</a>
+            </div>
+            
+            <!-- 로그인 상태일 때 -->
+            <div class="logged-user" th:if="${isLoggedIn}">
+                <div class="user-profile">
+                    <img th:src="${profileImage}" alt="프로필" class="profile-img">
+                    <span class="user-nickname" th:text="${nickname}">닉네임</span>
+                </div>
+
+                <div class="user-actions">
+                    <form class="logout-form" th:action="@{/logout}" method="post">
+                        <input type="hidden" name="_csrf" th:value="${_csrf.token}"/>
+                        <button type="submit" class="logout-btn">로그아웃</button>
+                    </form>
+
+                    <!-- 숨겨진 계정 비활성화 폼 -->
+                    <form class="deactivate-form" th:action="@{${deactivatePath}}" method="patch"
+                          style="background-color: #EBF4F6; color: rgb(54,54,52); font-weight: 900;">
+                        <input type="text" name="authUserId" id="authUserId">
+                        <input type="password" name="authUserPassword" id="authUserPassword">
+                        <button type="submit"></button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- 다국어 선택 -->
+        <div class="lang-select">
+            <a href="?lang=ko" class="lang-option">🇰🇷 한국어</a>
+            <span class="lang-separator">|</span>
+            <a href="?lang=en" class="lang-option">🇺🇸 English</a>
+        </div>
     </div>
 </header>

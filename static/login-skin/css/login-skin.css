@@ -1,0 +1,30 @@
+/* Tailwind CSS와 함께 사용할 커스텀 스타일을 여기에 추가하세요. */
+
+body {
+  @apply font-sans;
+}
+
+/* 로그인 카드에 대한 추가 스타일 */
+#app {
+  @apply transition-all duration-500 ease-in-out;
+}
+
+#app:hover {
+  @apply shadow-xl;
+}
+
+/* 입력 필드 포커스 시 테두리 색상 변경 */
+input[type="text"]:focus,
+input[type="password"]:focus {
+  @apply ring-2 ring-indigo-500 border-transparent;
+}
+
+/* 버튼에 호버 효과 추가 */
+button[type="submit"] {
+  @apply transition-colors duration-300;
+}
+
+/* 예시: */
+/* .custom-button {
+  @apply bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded;
+} */

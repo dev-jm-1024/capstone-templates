@@ -1,20 +1,57 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="ko">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>게임 커뮤니티 플랫폼</title>
+
     <!-- CSRF 토큰 정보 (form 전송에 사용됨) -->
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+    <!-- Global, Layout & Component Styles -->
+    <link rel="stylesheet" th:href="@{/main-contents-skin/css/global.css}">
+    <link rel="stylesheet" th:href="@{/main-contents-skin/css/header/header.css}">
+    <link rel="stylesheet" th:href="@{/main-contents-skin/css/nav/nav.css}">
+    <link rel="stylesheet" th:href="@{/main-contents-skin/css/footer/footer.css}">
+    <link rel="stylesheet" th:href="@{/main-contents-skin/css/sidebar/sidebar.css}">
+    <link rel="stylesheet" th:href="@{/main-contents-skin/css/main/content-main.css}">
+    
+    <!-- JavaScript Files -->
+    <script th:src="@{/main-contents-skin/js/global.js}"></script>
+    <script th:src="@{/main-contents-skin/js/header.js}"></script>
+    <script th:src="@{/main-contents-skin/js/nav.js}"></script>
+    <script th:src="@{/main-contents-skin/js/sidebar.js}"></script>
+    <script th:src="@{/main-contents-skin/js/main.js}"></script>
+    <script th:src="@{/main-contents-skin/js/footer.js}"></script>
 </head>
 <body>
-<div th:replace="main-contents/header-frag/header :: header"></div>
-<div th:replace="main-contents/sidebar-frag/sidebar :: sidebar"></div>
-<div th:replace="main-contents/main-frag/content-main :: main"></div>
-<div th:replace="main-contents/footer-frag/footer :: footer"></div>
+<!-- 헤더 영역 -->
+<div class="header-wrapper">
+    <div th:replace="main-contents/header-frag/header :: header"></div>
+</div>
 
-<!-- 로그인 상태 출력용 영역 (뷰 렌더링 시 서버에서 판단함) -->
-<span id="userInfo" th:text="${isLoggedIn} ? '로그인 상태' : '비회원'">상태 확인 중...</span>
+<!-- 메인 콘텐츠 영역 -->
+<div class="page-content-wrapper">
+    <!-- 사이드바 -->
+    <div class="sidebar-wrapper">
+        <div th:replace="main-contents/sidebar-frag/sidebar :: sidebar"></div>
+    </div>
 
+    <!-- 메인 콘텐츠 -->
+    <div class="main-content-wrapper">
+        <div th:replace="main-contents/main-frag/content-main :: main"></div>
+    </div>
+</div>
+
+<!-- 푸터 영역 -->
+<div class="footer-wrapper">
+    <div th:replace="main-contents/footer-frag/footer :: footer"></div>
+</div>
+
+<!-- 사용자 상태 정보 (개발용) -->
+<div class="user-status-info" style="display: none;">
+    <span id="userInfo" th:text="${isLoggedIn} ? '로그인 상태' : '비회원'">상태 확인 중...</span>
+</div>
 </body>
 </html>
